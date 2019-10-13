@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {StyleSheet, View, Text} from 'react-native';
 import {Provider} from 'react-redux';
 import {store} from './redux/reducers/userReducer';
@@ -7,13 +7,15 @@ import HomeScreen from './components/HomeScreen';
 import Questionaire from './components/Questionaire';
 
 const App = () => {
+  const [questionaire, setQuestionaire] = useState(false);
   return (
-    <Provider store={store}>
-      <View>
-        {/* <HomeScreen /> */}
-        <Questionaire />
-      </View>
-    </Provider>
+    <View>
+      {!questionaire ? (
+        <HomeScreen getStarted={setQuestionaire} />
+      ) : (
+        <Questionaire questionaire={questionaire} />
+      )}
+    </View>
   );
 };
 

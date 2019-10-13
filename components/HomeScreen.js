@@ -7,7 +7,9 @@ const HomeScreen = props => {
     <View style={styles.container}>
       <Slider />
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity
+          onPress={() => props.getStarted(true)}
+          style={styles.button}>
           <Text style={styles.buttonText}>Get Started</Text>
         </TouchableOpacity>
       </View>
