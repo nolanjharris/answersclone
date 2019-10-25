@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useState} from 'react';
+import {connect} from 'react-redux';
 import {
   View,
   Text,
@@ -6,35 +7,43 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
+import completeQuestions from '../redux/reducers/userReducer';
 
 import Swiper from 'react-native-swiper';
+import SlideQuestion from './SlideQuestion';
 
 const Questionaire = props => {
+  const [index, setIndex] = useState(0);
+  const questions = [
+    "Hi! I'm Andi, and I'll be getting you set up with your own board-certified clinician. First things first, what should I call you?",
+    // `Nice to meet you, ${props.user.parentName}, and what should I call your child?`,
+    // `What a great name! And how old is ${props.user.name}?`,
+    // `Is ${props.user.name} male, female, or other?`,
+    // `Got it! Does ${props.user.name} communicate with you?`,
+    // `Thanks! Does ${props.user.name} like playing with friends?`,
+    // `Almost done! Has ${props.user.name} ever gone to school (If more than once answer applies, pick most recent)?`,
+    // "And lastly, let your BCBA know where you'd like to start!",
+  ];
+
   return (
     <View style={styles.container}>
       <Swiper
         showsButtons={false}
         loop={false}
+        index={index}
         showsHorizontalScrollIndicator={false}>
-        <View style={styles.slide}>
-          <View style={styles.slideView}>
-            <Text style={styles.text}>
-              Hi! I'm Andi, and I'll be getting you set up with your own
-              board-certified clinician. First things first, what should I call
-              you?
-            </Text>
-            <View style={styles.inputView}>
-              <Text style={styles.inputViewText}>Question 1 of 8</Text>
-              <TextInput style={styles.input} />
-            </View>
-          </View>
-          <View style={styles.slideView}>
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.buttonText}>Next</Text>
-            </TouchableOpacity>
-            <Text style={styles.link}>Already have an account?</Text>
-          </View>
-        </View>
+        <SlideQuestion
+          endQuestionaire={props.setQuestionaire}
+          index={index}
+          question={questions[0]}
+        />
+        {/* <SlideQuestion index={index} question={questions[1]}/>
+        <SlideQuestion index={index} question={questions[2]}/>
+        <SlideQuestion index={index} question={questions[3]}/>
+        <SlideQuestion index={index} question={questions[4]}/>
+        <SlideQuestion index={index} question={questions[5]}/>
+        <SlideQuestion index={index} question={questions[6]}/>
+        <SlideQuestion index={index} question={questions[7]}/> */}
       </Swiper>
     </View>
   );
@@ -45,52 +54,30 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  slide: {
-    flex: 1,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: '#9a83c6',
-    padding: 20,
-  },
-  slideView: {
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  text: {
-    textAlign: 'center',
-    fontSize: 18,
-    color: '#fff',
-    marginVertical: 15,
-  },
-  inputView: {
-    width: '100%',
-  },
-  inputViewText: {
-    color: '#fff',
-    marginBottom: 5,
-  },
-  input: {
-    height: 30,
-    width: '100%',
-    backgroundColor: 'gray',
-  },
-  button: {
-    width: '100%',
-    height: 45,
-    backgroundColor: '#04D4F0',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 8,
-    marginBottom: 10,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-  },
-  link: {
-    color: '#fff',
-  },
 });
 
-export default Questionaire;
+function mapStateToProps(reduxState) {
+  return {
+    parentName: reduxState.user.parentName,
+    name: reduxState.user.name,
+    age: reduxState.user.age,
+    sex: reduxState.user.sex,
+    conversational: reduxState.user.conversational,
+    playful: reduxState.user.playful,
+    school: reduxState.user.school,
+    focus: reduxState.user.focus,
+    questionsComplete: reduxState.user.questionsComplete,
+  };
+}
+
+// function mapDispatchToProps(dispatch) {
+//   return {
+//     updateUserInfo: () => dispatch({type: UPDATE_USER_INFO, payload: userInfo}),
+//   };
+// }
+
+export default connect(
+  mapStateToProps,
+  // mapDispatchToProps,
+  {completeQuestions},
+)(Questionaire);

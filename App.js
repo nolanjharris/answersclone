@@ -1,29 +1,14 @@
-import React, {useState, useEffect} from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import React from 'react';
 import {Provider} from 'react-redux';
-import {store} from './redux/reducers/userReducer';
-
-import HomeScreen from './components/HomeScreen';
-import Questionaire from './components/Questionaire';
+import store from './redux/store';
+import RootComponent from './components/RootComponent';
 
 const App = () => {
-  const [questionaire, setQuestionaire] = useState(false);
   return (
-    <View>
-      {!questionaire ? (
-        <HomeScreen getStarted={setQuestionaire} />
-      ) : (
-        <Questionaire questionaire={questionaire} />
-      )}
-    </View>
+    <Provider store={store}>
+      <RootComponent />
+    </Provider>
   );
 };
-
-const styles = StyleSheet.create({
-  screen: {
-    width: '100%',
-    height: '100%',
-  },
-});
 
 export default App;
